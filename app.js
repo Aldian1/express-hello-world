@@ -3,25 +3,179 @@ const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.type('html').send(html));
+// Middleware for parsing JSON bodies
+app.use(express.json());
 
+// Utility function for making API requests
+const makeApiRequest = async (method, endpoint, params = {}, data = {}) => {
+  try {
+    const response = await axios({
+      method,
+      url: `https://app.documenso.com/api/v1${endpoint}`,
+      headers: {
+        'Authorization': `Bearer ${process.env.DOCUMENSO_API_KEY}`
+      },
+      params,
+      data
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error making ${method.toUpperCase()} request to ${endpoint}:`, error);
+    throw error;
+  }
+};
+
+// Route to fetch documents
 app.get("/documents", async (req, res) => {
   try {
-    const response = await axios.get('https://app.documenso.com/api/v1/documents', {
-      headers: {
-        'Authorization': `${process.env.DOCUMENSO_API_KEY}`
-      },
-      params: {
-        page: 1,
-        perPage: 10
-      }
-    });
-    res.json(response.data);
+    const data = await makeApiRequest('get', '/documents', { page: req.query.page || 1, perPage: req.query.perPage || 10 });
+    res.json(data);
   } catch (error) {
-    console.error('Error fetching documents:', error);
     res.status(500).json({ error: 'An error occurred while fetching documents' });
   }
 });
+
+// Route to create a new document
+app.post("/documents", async (req, res) => {
+  try {
+    const data = await makeApiRequest('post', '/documents', {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while creating a document' });
+  }
+});
+
+// Route to fetch a specific document by ID
+app.get("/documents/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('get', `/documents/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the document' });
+  }
+});
+
+// Route to update a specific document by ID
+app.put("/documents/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('put', `/documents/${req.params.id}`, {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the document' });
+  }
+});
+
+// Route to delete a specific document by ID
+app.delete("/documents/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('delete', `/documents/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the document' });
+  }
+});
+
+// Route to fetch templates
+app.get("/templates", async (req, res) => {
+  try {
+    const data = await makeApiRequest('get', '/templates', { page: req.query.page || 1, perPage: req.query.perPage || 10 });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching templates' });
+  }
+});
+
+// Route to create a new template
+app.post("/templates", async (req, res) => {
+  try {
+    const data = await makeApiRequest('post', '/templates', {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while creating a template' });
+  }
+});
+
+// Route to fetch a specific template by ID
+app.get("/templates/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('get', `/templates/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the template' });
+  }
+});
+
+// Route to update a specific template by ID
+app.put("/templates/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('put', `/templates/${req.params.id}`, {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the template' });
+  }
+});
+
+// Route to delete a specific template by ID
+app.delete("/templates/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('delete', `/templates/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the template' });
+  }
+});
+
+// Route to fetch users
+app.get("/users", async (req, res) => {
+  try {
+    const data = await makeApiRequest('get', '/users', { page: req.query.page || 1, perPage: req.query.perPage || 10 });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching users' });
+  }
+});
+
+// Route to create a new user
+app.post("/users", async (req, res) => {
+  try {
+    const data = await makeApiRequest('post', '/users', {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while creating a user' });
+  }
+});
+
+// Route to fetch a specific user by ID
+app.get("/users/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('get', `/users/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the user' });
+  }
+});
+
+// Route to update a specific user by ID
+app.put("/users/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('put', `/users/${req.params.id}`, {}, req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the user' });
+  }
+});
+
+// Route to delete a specific user by ID
+app.delete("/users/:id", async (req, res) => {
+  try {
+    const data = await makeApiRequest('delete', `/users/${req.params.id}`);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the user' });
+  }
+});
+
+app.get("/", (req, res) => res.type('html').send(html));
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
@@ -63,18 +217,4 @@ const html = `
       section {
         border-radius: 1em;
         padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-      }
-    </style>
-  </head>
-  <body>
-    <section>
-      Hello from Render!
-    </section>
-  </body>
-</html>
-`
+        position
