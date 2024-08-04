@@ -1,8 +1,27 @@
 const express = require("express");
+const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => res.type('html').send(html));
+
+app.get("/documents", async (req, res) => {
+  try {
+    const response = await axios.get('https://app.documenso.com/api/v1/documents', {
+      headers: {
+        'Authorization': `${process.env.DOCUMENSO_API_KEY}`
+      },
+      params: {
+        page: 1,
+        perPage: 10
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching documents:', error);
+    res.status(500).json({ error: 'An error occurred while fetching documents' });
+  }
+});
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
