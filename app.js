@@ -217,4 +217,17 @@ const html = `
       section {
         border-radius: 1em;
         padding: 1em;
-        position
+        position: absolute;
+       top: 50%;
+left: 50%;
+margin-right: -50%;
+transform: translate(-50%, -50%);
+}
+</head>
+  <body>
+    <section>
+      Hello from Render!
+    </section>
+  </body>
+</html>
+`;
